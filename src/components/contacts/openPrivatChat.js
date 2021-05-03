@@ -5,22 +5,15 @@ import { useChat } from '../../context/chatState';
 
 export default function OpenPrivatChat () {
   const [text, setText] = useState('')
-  const setRef = useCallback(node => {
-    if (node) {
-      node.scrollIntoView({ smooth: true })
-    }
-  }, [])
 
-  const { selectedContact } = useContacts()
+  const {contacts, selectedContactIndex } = useContacts()
   const { sendPrivateMessage } = useChat()
-
-  //const selectedContact = contacts[selectedContactIndex]
 
   function handleSubmit(e) {
     e.preventDefault()
 
     sendPrivateMessage(
-        selectedContact.id,
+      contacts[selectedContactIndex].id,
         text
     )
     setText('')
@@ -30,7 +23,7 @@ export default function OpenPrivatChat () {
     <div className="d-flex flex-column flex-grow-1">
       <div className="flex-grow-1 overflow-auto">
         <div className="d-flex flex-column align-items-start justify-content-end px-3">
-          {selectedContact && selectedContact.messages.map((message) => {
+          {contacts[selectedContactIndex] && contacts[selectedContactIndex].messages.map((message) => {
             return <div>{message}</div>
           })}
         </div>

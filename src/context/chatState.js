@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import {useSocket} from './socketState'
 import {useContacts} from './contactState'
 
-
 const ChatContext = React.createContext()
 
 export function useChat() {
@@ -10,7 +9,6 @@ export function useChat() {
   }
 
 export const ChatState = ({children}) => {
-    const [messages, setMessages] = useState([])
     const [account, setAccount] = useState()
     const [events, setEvents ] = useState([])
     const [ lastMessage, setLastMessage] = useState()
@@ -42,15 +40,10 @@ export const ChatState = ({children}) => {
     setEvents(newEvents)
    }, [selectedEventIndex])
 
-
-     const getMessage = (message) => {
-        setMessages( prev => [...prev, message])
-     }
-
     // sending & receving messages
     useEffect(()=> {
       if (socket == null) return 
-  
+
       socket.on('receive-message', (messages) => {
         console.log(messages)
       })
@@ -65,6 +58,8 @@ export const ChatState = ({children}) => {
 
     },[socket])
 
+
+    // Update Contact with messages
     useEffect(()=> {
       if (lastMessage){
       const {recipientId, text, sender} = lastMessage
@@ -114,7 +109,7 @@ export const ChatState = ({children}) => {
      }
 
     return (
-        <ChatContext.Provider value={{account, setAccount, messages, getMessage, sendMessage, sendPrivateMessage, createEvent, events, setSelectedEventIndex, setSelectedEvent, selectedEvent}}>
+        <ChatContext.Provider value={{account, setAccount, sendMessage, sendPrivateMessage, createEvent, events, setSelectedEventIndex, setSelectedEvent, selectedEvent}}>
             {children}
         </ChatContext.Provider>
     );

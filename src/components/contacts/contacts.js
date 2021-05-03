@@ -8,7 +8,7 @@ const Contacts = () => {
 
     const idRef = useRef()
     const nameRef = useRef()
-    const { contacts, createContact,selectedContact, setSelectedContact, setSelectedContactIndex } = useContacts()
+    const { contacts, createContact, setSelectedContactIndex, selectedContactIndex } = useContacts()
 
     function handleSubmit(e) {
       e.preventDefault()
@@ -41,7 +41,7 @@ const Contacts = () => {
                 key={contact.id}
                 action
                 onClick={()=> {
-                  setSelectedContact(contact)
+                  //setSelectedContact(contact)
                   setSelectedContactIndex(index)
                 }}
                 active={contact.selected}
@@ -52,7 +52,7 @@ const Contacts = () => {
         </ListGroup>
         </div>
 
-        {selectedContact && <OpenPrivatChat/>}
+        {contacts[selectedContactIndex] && <OpenPrivatChat/>}
         </div>
 
         </div>

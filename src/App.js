@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
 import {socket} from './socket/socket'
-//import Chat from './chat/chat'
-import Contacts from './components/contacts'
+import Contacts from './components/contacts/contacts'
 import Login from './components/login'
-import Dashboard from './components/dashboard'
+import Dashboard from './components/events/dashboard'
 import { useChat } from './context/chatState'
 import { Switch, Route, Redirect } from "react-router-dom";
 

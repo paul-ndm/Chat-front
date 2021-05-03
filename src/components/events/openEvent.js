@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import { Form, InputGroup, Button } from 'react-bootstrap'
-import { useChat } from '../context/chatState';
+import { useChat } from '../../context/chatState';
 
 export default function OpenEvent () {
   const [text, setText] = useState('')

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Modal, Form, Button } from 'react-bootstrap'
-import { useContacts } from '../context/contactState'
-import { useChat } from '../context/chatState'
+import { useContacts } from '../../context/contactState'
+import { useChat } from '../../context/chatState'
 
 const EventModal = ({ closeModal }) => {
   const [selectedContacts, setSelectedContactIds] = useState([])

@@ -1,13 +1,13 @@
 import Sidebar from './sidebar'
 import OpenEvents from './openEvent'
-import { useChat } from '../context/chatState'
+import { useChat } from '../../context/chatState'
 
 const Dashboard = () => {
 
     const { selectedEvent } = useChat()
 
     return (
-    <div className="d-flex" style={{ height: '100vh' }}>
+    <div className="d-flex" style={{ height: '50vh' }}>
         <Sidebar/>
         {selectedEvent && <OpenEvents />}
         

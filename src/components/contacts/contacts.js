@@ -1,13 +1,14 @@
 import React, { useRef } from 'react';
 import {ListGroup} from 'react-bootstrap'
-import { useContacts } from '../context/contactState';
+import { useContacts } from '../../context/contactState';
 import { Form, Button } from 'react-bootstrap'
+import OpenPrivatChat from './openPrivatChat'
 
 const Contacts = () => {
 
     const idRef = useRef()
     const nameRef = useRef()
-    const { contacts, createContact } = useContacts()
+    const { contacts, createContact,selectedContact, setSelectedContact, setSelectedContactIndex } = useContacts()
 
     function handleSubmit(e) {
       e.preventDefault()
@@ -30,14 +31,29 @@ const Contacts = () => {
         </Form.Group>
         <Button type="submit">Add Contact</Button>
       </Form>
-
+      <div className="d-flex" style={{ height: '50vh' }}>
+      
+      
+      <div>
         <ListGroup variant="flush">
-            {contacts && contacts.map(contact => (
-                <ListGroup.Item key={contact.id}>
+            {contacts && contacts.map((contact, index) => (
+                <ListGroup.Item 
+                key={contact.id}
+                action
+                onClick={()=> {
+                  setSelectedContact(contact)
+                  setSelectedContactIndex(index)
+                }}
+                active={contact.selected}
+                >
                 {contact.name}
                 </ListGroup.Item>
             ))}
         </ListGroup>
+        </div>
+
+        {selectedContact && <OpenPrivatChat/>}
+        </div>
 
         </div>
     );

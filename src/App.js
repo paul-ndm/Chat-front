@@ -1,23 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from 'react'
+import {socket} from './socket/socket'
+//import Chat from './chat/chat'
+import Contacts from './components/contacts'
+import Login from './components/login'
+import Dashboard from './components/dashboard'
+import { useChat } from './context/chatState'
+import { Switch, Route, Redirect } from "react-router-dom";
 
 function App() {
+
+  useEffect(()=> {
+    
+    socket.emit('test2', 'from frontend')
+  })
+
+ const { account } = useChat()
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+    <Switch>
+    
+    <Route path='/chat'>
+      <Contacts />
+      <br />
+      <Dashboard />
+    </Route>
+    <Route path='/'>
+    {account ? <Redirect to="/chat"/> : <Login /> }
+    </Route>
+
+    </Switch>
     </div>
   );
 }

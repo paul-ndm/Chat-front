@@ -1,6 +1,6 @@
 import React from 'react';
 import { ListGroup } from 'react-bootstrap'
-import { useChat } from '../context/chatState';
+import { useChat } from '../../context/chatState';
 
 const Events = () => {
 

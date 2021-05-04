@@ -1,5 +1,5 @@
 import React, { useState} from 'react';
-import { Tab, Nav, Button, Modal } from 'react-bootstrap'
+import {Button, Modal } from 'react-bootstrap'
 import EventModal from './eventModal'
 import Events from './events'
 

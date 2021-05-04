@@ -10,15 +10,17 @@ export default function OpenEvent () {
     }
   }, [])
 
-  const { sendMessage, selectedEvent } = useChat()
+  const { account, sendMessage, events, selectedEventIndex, setEvents} = useChat()
 
   function handleSubmit(e) {
     e.preventDefault()
 
     sendMessage(
-      selectedEvent.recipients.map(r => r.id),
+      events[selectedEventIndex].eventId,
+      events[selectedEventIndex].recipients.map(r => r.id),
       text
     )
+    events[selectedEventIndex].messages.push({text, id: account.id, author: account.name })
     setText('')
   }
 
@@ -26,20 +28,21 @@ export default function OpenEvent () {
     <div className="d-flex flex-column flex-grow-1">
       <div className="flex-grow-1 overflow-auto">
         <div className="d-flex flex-column align-items-start justify-content-end px-3">
-          {selectedEvent.messages.map((message, index) => {
-            const lastMessage = selectedEvent.messages.length - 1 === index
+          {events[selectedEventIndex].messages.map((message, index) => {
+            const fromMe = account.id === message.id
+            const lastMessage = events[selectedEventIndex].messages.length - 1 === index
             return (
               <div
                 ref={lastMessage ? setRef : null}
                 key={index}
-                className={`my-1 d-flex flex-column ${message.fromMe ? 'align-self-end align-items-end' : 'align-items-start'}`}
+                className={`my-1 d-flex flex-column ${fromMe ? 'align-self-end align-items-end' : 'align-items-start'}`}
               >
                 <div
-                  className={`rounded px-2 py-1 ${message.fromMe ? 'bg-primary text-white' : 'border'}`}>
+                  className={`rounded px-2 py-1 ${fromMe ? 'bg-primary text-white' : 'border'}`}>
                   {message.text}
                 </div>
-                <div className={`text-muted small ${message.fromMe ? 'text-right' : ''}`}>
-                  {message.fromMe ? 'You' : message.senderName}
+                <div className={`text-muted small ${fromMe ? 'text-right' : ''}`}>
+                  {fromMe ? 'You' : message.author}
                 </div>
               </div>
             )

@@ -15,7 +15,6 @@ const Events = () => {
                 action
                 onClick={()=> {
                     setSelectedEventIndex(index)
-                    setSelectedEvent(event)
                 }}
                 active={event.selected}
                 

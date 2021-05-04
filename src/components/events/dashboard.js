@@ -4,12 +4,12 @@ import { useChat } from '../../context/chatState'
 
 const Dashboard = () => {
 
-    const { selectedEvent } = useChat()
+    const { events, selectedEventIndex } = useChat()
 
     return (
     <div className="d-flex" style={{ height: '50vh' }}>
         <Sidebar/>
-        {selectedEvent && <OpenEvents />}
+        {events[selectedEventIndex] && <OpenEvents />}
         
     </div>
     )

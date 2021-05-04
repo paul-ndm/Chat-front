@@ -8,11 +8,6 @@ import { Switch, Route, Redirect } from "react-router-dom";
 
 function App() {
 
-  useEffect(()=> {
-    
-    socket.emit('test2', 'from frontend')
-  })
-
  const { account } = useChat()
 
   return (

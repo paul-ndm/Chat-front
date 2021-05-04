@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import io from 'socket.io-client'
-import { useChat } from '../context/chatState'
 
 const SocketContext = React.createContext()
 
@@ -10,10 +9,6 @@ export function useSocket() {
 
 export const SocketState = ({children}) => {
      const [socket, setSocket] = useState()
-
-
-    //  const {account} = useChat()
-    //  console.log(account)  
 
      useEffect(async ()=> {
 

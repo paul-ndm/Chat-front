@@ -11,17 +11,17 @@ export function useChat() {
 export const ChatState = ({children}) => {
     const [account, setAccount] = useState()
     const [events, setEvents ] = useState([])
-    const [ lastMessage, setLastMessage] = useState()
     const [selectedEventIndex, setSelectedEventIndex] = useState(0)
     const [selectedEvent, setSelectedEvent ] = useState()
     const { socket } = useSocket()
-    const { contacts } = useContacts()
+    const { contacts, setContacts } = useContacts()
 
     useEffect(()=> {
       const JSONdata = localStorage.getItem('chat-account')
       const localAccount = JSON.parse(JSONdata)
       if (localAccount) {
         setAccount(localAccount)
+        console.log(localAccount)
       }
       
    },[])
@@ -40,7 +40,7 @@ export const ChatState = ({children}) => {
     setEvents(newEvents)
    }, [selectedEventIndex])
 
-    // sending & receving messages
+    // settung up the socket for receving messages
     useEffect(()=> {
       if (socket == null) return 
 
@@ -49,64 +49,44 @@ export const ChatState = ({children}) => {
       })
 
       socket.on("receive-private-message", ({recipientId, text, sender}) => {
-        setLastMessage({recipientId, text, sender})
-      })
+        setContacts(prev => {
+          return prev.map(contact => {
+             if(contact.id === sender) {
+              console.log('message received from', sender, text.text)
+               contact.messages.push(text)
+               return contact
+             } else {
+               return contact
+             }})})})
   
       return () => {socket.off('receive-message')
-                    socket.off("receive-private-message")
-    }
-
+                    socket.off("receive-private-message")}
     },[socket])
 
-
-    // Update Contact with messages
-    useEffect(()=> {
-      if (lastMessage){
-      const {recipientId, text, sender} = lastMessage
-      
-        // const targetContact = contacts.findIndex(contact => contact.id == recipientId)
-        // console.log(targetContact)
-        contacts.map(contact => {
-          
-          if(contact.id === recipientId ) {
-            console.log(contact)
-            contact.messages.push(text)
-            
-            return contact
-          } else {
-
-            return contact
-          }
-        })
-}
-    }, [lastMessage])
-
+    // sending messages
      const sendMessage = (recipients, text) => {
-      socket.emit('send-message', { recipients, text})
-      }
+        socket.emit('send-message', { recipients, text})
+        }
 
       const sendPrivateMessage = (recipientId, text) => {
         socket.emit('private-message', { recipientId, text})
         }
 
+      // create new Event
      const createEvent = (recipients) => {
 
         setEvents(prev => {
           const newEvent = { recipients, messages: [], selected: true}
-
-          const oldEvents = prev.map( event => 
-            {
+          const oldEvents = prev.map( event => {
             const { recipients, messages } = event
             return { recipients, messages, selected: false}
-          } 
-          )
+          })
 
           setSelectedEventIndex(oldEvents.length)
           setSelectedEvent(newEvent)
 
           return [...oldEvents, newEvent ]
-        })
-     }
+        })}
 
     return (
         <ChatContext.Provider value={{account, setAccount, sendMessage, sendPrivateMessage, createEvent, events, setSelectedEventIndex, setSelectedEvent, selectedEvent}}>

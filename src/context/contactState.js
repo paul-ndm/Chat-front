@@ -21,7 +21,6 @@ export const ContactState = ({children}) => {
       const { id, name, messages } = contact
       const selected = index === selectedContactIndex
       const newContact = { id, name, messages, selected}
-
       return newContact
     })
     setContacts(newContacts)

@@ -55,7 +55,6 @@ export const ChatState = ({children}) => {
       socket.on("receive-private-message", ({recipientId, text, sender}) => {
         setContacts(prev => {
           const spreadContacts = prev.map(c => ({...c, messages: [...c.messages]}))
-
           return spreadContacts.map(contact => {
              if(contact.id === sender) {
               console.log('message received from', sender, text.text)

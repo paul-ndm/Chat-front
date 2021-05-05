@@ -12,9 +12,11 @@ export function AuthState({ children }) {
   const [loading, setLoading] = useState(true)
 
   function signup(email, password) {
+    console.log(email, password)
     return auth.createUserWithEmailAndPassword(email, password)
   }
 
+  //not in use yet
   function login(email, password) {
     return auth.signInWithEmailAndPassword(email, password)
   }

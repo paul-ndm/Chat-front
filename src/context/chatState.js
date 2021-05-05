@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {useSocket} from './socketState'
 import {useContacts} from './contactState'
+import { v4 as uuidV4 } from 'uuid'
 
 const ChatContext = React.createContext()
 
@@ -12,9 +13,8 @@ export const ChatState = ({children}) => {
     const [account, setAccount] = useState()
     const [events, setEvents ] = useState([])
     const [selectedEventIndex, setSelectedEventIndex] = useState(0)
-    const [selectedEvent, setSelectedEvent ] = useState()
     const { socket } = useSocket()
-    const { contacts, setContacts } = useContacts()
+    const { setContacts } = useContacts()
 
     useEffect(()=> {
       const JSONdata = localStorage.getItem('chat-account')
@@ -32,9 +32,6 @@ export const ChatState = ({children}) => {
       const { recipients, messages } = event
       const selected = index === selectedEventIndex
       const newEvent = { recipients, messages, selected}
-      if(newEvent.selected) {
-        setSelectedEvent(newEvent)
-      }
       return newEvent
     })
     setEvents(newEvents)
@@ -44,28 +41,37 @@ export const ChatState = ({children}) => {
     useEffect(()=> {
       if (socket == null) return 
 
-      socket.on('receive-message', (messages) => {
-        console.log(messages)
+      socket.on('receive-message', ({eventId, recipients, sender, message}) => {
+        setEvents(prev => {
+          return prev.map(event => {
+             if(event.eventId === eventId) {
+              event.messages.push(message)
+               return event
+             } else {
+               return event
+             }})})
       })
 
       socket.on("receive-private-message", ({recipientId, text, sender}) => {
         setContacts(prev => {
-          return prev.map(contact => {
+          const spreadContacts = prev.map(c => ({...c, messages: [...c.messages]}))
+          return spreadContacts.map(contact => {
              if(contact.id === sender) {
               console.log('message received from', sender, text.text)
                contact.messages.push(text)
                return contact
              } else {
                return contact
-             }})})})
+             }})})
+            })
   
       return () => {socket.off('receive-message')
                     socket.off("receive-private-message")}
     },[socket])
 
     // sending messages
-     const sendMessage = (recipients, text) => {
-        socket.emit('send-message', { recipients, text})
+     const sendMessage = (eventId, recipients, text) => {
+        socket.emit('send-message', {eventId, recipients, message: {text, id: account.id, author: account.name }})
         }
 
       const sendPrivateMessage = (recipientId, text) => {
@@ -73,23 +79,24 @@ export const ChatState = ({children}) => {
         }
 
       // create new Event
-     const createEvent = (recipients) => {
+     const createEvent = (selectedContacts) => {
+        const eventId = uuidV4()
 
         setEvents(prev => {
-          const newEvent = { recipients, messages: [], selected: true}
+          const recipients = [...selectedContacts, account]
+          const newEvent = { eventId, recipients, messages: [], selected: true}
           const oldEvents = prev.map( event => {
-            const { recipients, messages } = event
-            return { recipients, messages, selected: false}
+            const { eventId, recipients, messages } = event
+            return { eventId, recipients, messages, selected: false}
           })
 
           setSelectedEventIndex(oldEvents.length)
-          setSelectedEvent(newEvent)
 
           return [...oldEvents, newEvent ]
         })}
 
     return (
-        <ChatContext.Provider value={{account, setAccount, sendMessage, sendPrivateMessage, createEvent, events, setSelectedEventIndex, setSelectedEvent, selectedEvent}}>
+        <ChatContext.Provider value={{account, setAccount, sendMessage, sendPrivateMessage, createEvent, events, setSelectedEventIndex, selectedEventIndex}}>
             {children}
         </ChatContext.Provider>
     );

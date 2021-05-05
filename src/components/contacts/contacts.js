@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import {ListGroup} from 'react-bootstrap'
 import { useContacts } from '../../context/contactState';
-import { Form, Button, Modal } from 'react-bootstrap'
+import { Button, Modal } from 'react-bootstrap'
 import OpenPrivatChat from './openPrivatChat'
 import ContactModal from './contactModal'
 

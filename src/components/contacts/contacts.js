@@ -46,7 +46,7 @@ const Contacts = () => {
                 onClick={()=> {
                   setSelectedContactIndex(index)
                 }}
-                active={contact.selected}
+                active={index === selectedContactIndex}
                 >
                 {contact.name}
                 </ListGroup.Item>

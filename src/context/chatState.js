@@ -18,17 +18,6 @@ export const ChatState = ({children}) => {
     const { setContacts, contacts } = useContacts()
     const { currentUser } = useAuth()
 
-   // switch selected-property
-   useEffect(()=> {
-    const newEvents = events.map((event, index) => {
-      const { recipients, eventId, messages } = event
-      const selected = index === selectedEventIndex
-      const newEvent = { recipients, eventId, messages, selected}
-      return newEvent
-    })
-    setEvents(newEvents)
-   }, [selectedEventIndex])
-
    // getting all events of user
    useEffect(async()=> {
      if(currentUser){
@@ -88,23 +77,27 @@ export const ChatState = ({children}) => {
      const createEvent = (selectedContacts) => {
         const eventId = uuidV4()
         const recipients = [...selectedContacts, {id: currentUser.uid, name: currentUser.displayName }]
-        const newEvent = { eventId, recipients, messages: [], selected: true}
+        const newEvent = { eventId, recipients, messages: []}
 
         socket.emit('new-event', newEvent)
 
         setEvents(prev => {
-          const oldEvents = prev.map( event => {
-            const { eventId, recipients, messages } = event
-            return { eventId, recipients, messages, selected: false}
-          })
-
-          setSelectedEventIndex(oldEvents.length)
-
-          return [...oldEvents, newEvent ]
+          setSelectedEventIndex(prev.length)
+          return [...prev, newEvent ]
         })}
 
+          // delete Contact locally
+    const removeLocalEvent = (event) => {
+      setEvents(prev => {
+          const newEvents = prev.filter( e => e.eventId !== event.eventId)
+          return [...newEvents]
+      })
+      setSelectedEventIndex(events.length - 2)
+
+  }
+
     return (
-        <ChatContext.Provider value={{currentUser, sendMessage, sendPrivateMessage, createEvent, events, setSelectedEventIndex, selectedEventIndex}}>
+        <ChatContext.Provider value={{currentUser, sendMessage, sendPrivateMessage, createEvent, events, removeLocalEvent, setSelectedEventIndex, selectedEventIndex}}>
             {children}
         </ChatContext.Provider>
     );

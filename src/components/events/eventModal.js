@@ -27,13 +27,14 @@ const EventModal = ({ closeModal }) => {
   }
 
   return (
-    <div>
+    <div key={'event-modal'}>
       <Modal.Header closeButton>Create Conversation</Modal.Header>
-      <Modal.Body>
+      <Modal.Body key={'event-modal-body'}>
         <Form onSubmit={handleSubmit}>
-          {contacts.map(contact => (
+          {contacts.map((contact, index) => (
             <Form.Group controlId={contact.id} key={contact.id}>
               <Form.Check
+              key={'checkbox', contact.id}
                 type="checkbox"
                 value={selectedContacts.includes(contact)}
                 label={contact.name}

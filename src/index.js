@@ -12,15 +12,15 @@ import { BrowserRouter } from 'react-router-dom';
 ReactDOM.render(
   <React.StrictMode>
   <BrowserRouter>
+  <ContactState>
   <AuthState>
   <SocketState>
-  <ContactState>
   <ChatState>
     <App/>
   </ChatState>
-  </ContactState>
   </SocketState>
   </AuthState>
+  </ContactState>
   </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

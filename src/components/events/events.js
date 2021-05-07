@@ -6,7 +6,6 @@ const Events = () => {
 
     const { events, setSelectedEventIndex, setSelectedEvent } = useChat()
 
-
     return (
         <ListGroup variant="flush">
             {events.map((event, index) => (

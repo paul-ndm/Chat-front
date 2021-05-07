@@ -1,13 +1,13 @@
 import React, { useRef, useState } from "react"
 import { Form, Button, Card, Alert } from "react-bootstrap"
-import { useAuth } from '../context/authState'
+import { useAuth } from '../../context/authState'
 import { Link, useHistory } from "react-router-dom"
 
 export default function Signup() {
   const emailRef = useRef()
   const passwordRef = useRef()
   const passwordConfirmRef = useRef()
-  const { signup } = useAuth()
+  const { signup, logout, googleSignIn } = useAuth()
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const history = useHistory()
@@ -53,9 +53,15 @@ export default function Signup() {
             <Button disabled={loading} className="w-100" type="submit">
               Sign Up
             </Button>
+            <Button onClick={logout} className="w-100" type="submit">
+              Log out
+            </Button>
           </Form>
         </Card.Body>
       </Card>
+      <Button onClick={googleSignIn} className="w-100" type="submit">
+      Google sign in
+    </Button>
       <div className="w-100 text-center mt-2">
         Already have an account? <Link to="/login">Log In</Link>
       </div>

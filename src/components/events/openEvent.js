@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import { Form, InputGroup, Button } from 'react-bootstrap'
 import { useChat } from '../../context/chatState';
+import { useAuth } from '../../context/authState'
 
 export default function OpenEvent () {
   const [text, setText] = useState('')
@@ -10,7 +11,8 @@ export default function OpenEvent () {
     }
   }, [])
 
-  const { account, sendMessage, events, selectedEventIndex, setEvents} = useChat()
+  const { sendMessage, events, selectedEventIndex, setEvents} = useChat()
+  const { currentUser } = useAuth()
 
   function handleSubmit(e) {
     e.preventDefault()
@@ -20,7 +22,7 @@ export default function OpenEvent () {
       events[selectedEventIndex].recipients.map(r => r.id),
       text
     )
-    events[selectedEventIndex].messages.push({text, id: account.id, author: account.name })
+    events[selectedEventIndex].messages.push({text, id: currentUser.uid, author: currentUser.displayName })
     setText('')
   }
 
@@ -29,7 +31,7 @@ export default function OpenEvent () {
       <div className="flex-grow-1 overflow-auto">
         <div className="d-flex flex-column align-items-start justify-content-end px-3">
           {events[selectedEventIndex].messages.map((message, index) => {
-            const fromMe = account.id === message.id
+            const fromMe = currentUser.uid === message.id
             const lastMessage = events[selectedEventIndex].messages.length - 1 === index
             return (
               <div

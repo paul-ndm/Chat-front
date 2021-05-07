@@ -2,12 +2,16 @@ import React, { useState, useCallback } from 'react'
 import { Form, InputGroup, Button } from 'react-bootstrap'
 import { useContacts } from '../../context/contactState';
 import { useChat } from '../../context/chatState';
+import { useAuth } from '../../context/authState'
+import { updatePrivateChat } from '../../utils/api'
+
 
 export default function OpenPrivatChat () {
   const [text, setText] = useState('')
 
   const {contacts, selectedContactIndex } = useContacts()
   const { sendPrivateMessage } = useChat()
+  const { currentUser } = useAuth()
 
   function handleSubmit(e) {
     e.preventDefault()
@@ -16,11 +20,11 @@ export default function OpenPrivatChat () {
     let localMessage = { text, mine: true}
 
     sendPrivateMessage(
-      contacts[selectedContactIndex].id,
+      contacts[selectedContactIndex].userId,
       message
     )
-
     contacts[selectedContactIndex].messages.push(localMessage)
+    updatePrivateChat(currentUser, contacts)
 
     setText('')
   }
@@ -29,7 +33,7 @@ export default function OpenPrivatChat () {
     <div className="d-flex flex-column flex-grow-1">
       <div className="flex-grow-1 overflow-auto">
         <div className="d-flex flex-column align-items-start justify-content-end px-3">
-          {contacts[selectedContactIndex] && contacts[selectedContactIndex].messages.map((message, index) => {
+          {contacts[selectedContactIndex].messages && contacts[selectedContactIndex].messages.map((message, index) => {
             return <div 
             key={message + index}
             className={`my-1 d-flex flex-column ${message.mine ? 'align-self-end align-items-end' : 'align-items-start'}`}>{message.text}</div>

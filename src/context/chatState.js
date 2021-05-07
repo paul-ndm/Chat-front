@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import {useSocket} from './socketState'
 import {useContacts} from './contactState'
 import { v4 as uuidV4 } from 'uuid'
+import {useAuth } from './authState'
+import { getEventsForUser, updatePrivateChat } from '../utils/api'
 
 const ChatContext = React.createContext()
 
@@ -10,34 +12,33 @@ export function useChat() {
   }
 
 export const ChatState = ({children}) => {
-    const [account, setAccount] = useState()
     const [events, setEvents ] = useState([])
     const [selectedEventIndex, setSelectedEventIndex] = useState(0)
     const { socket } = useSocket()
-    const { setContacts } = useContacts()
-
-    useEffect(()=> {
-      const JSONdata = localStorage.getItem('chat-account')
-      const localAccount = JSON.parse(JSONdata)
-      if (localAccount) {
-        setAccount(localAccount)
-        console.log(localAccount)
-      }
-      
-   },[])
+    const { setContacts, contacts } = useContacts()
+    const { currentUser } = useAuth()
 
    // switch selected-property
    useEffect(()=> {
     const newEvents = events.map((event, index) => {
-      const { recipients, messages } = event
+      const { recipients, eventId, messages } = event
       const selected = index === selectedEventIndex
-      const newEvent = { recipients, messages, selected}
+      const newEvent = { recipients, eventId, messages, selected}
       return newEvent
     })
     setEvents(newEvents)
    }, [selectedEventIndex])
 
-    // settung up the socket for receving messages
+   // getting all events of user
+   useEffect(async()=> {
+     if(currentUser){
+    const joinedEvents = await getEventsForUser(currentUser.uid)
+    setEvents(joinedEvents)}
+
+   },[currentUser])
+
+
+    // settiung up the socket for receving messages
     useEffect(()=> {
       if (socket == null) return 
 
@@ -53,17 +54,22 @@ export const ChatState = ({children}) => {
       })
 
       socket.on("receive-private-message", ({recipientId, text, sender}) => {
+
         setContacts(prev => {
           const spreadContacts = prev.map(c => ({...c, messages: [...c.messages]}))
-          return spreadContacts.map(contact => {
-             if(contact.id === sender) {
+          spreadContacts.map(contact => {
+             if(contact.userId === sender) {
               console.log('message received from', sender, text.text)
                contact.messages.push(text)
                return contact
              } else {
                return contact
-             }})})
+             }})
+             updatePrivateChat(currentUser, spreadContacts)
+             return spreadContacts
             })
+            })
+          
   
       return () => {socket.off('receive-message')
                     socket.off("receive-private-message")}
@@ -71,7 +77,7 @@ export const ChatState = ({children}) => {
 
     // sending messages
      const sendMessage = (eventId, recipients, text) => {
-        socket.emit('send-message', {eventId, recipients, message: {text, id: account.id, author: account.name }})
+        socket.emit('send-message', {eventId, recipients, message: {text, id: currentUser.uid, name: currentUser.displayName}})
         }
 
       const sendPrivateMessage = (recipientId, text) => {
@@ -81,10 +87,12 @@ export const ChatState = ({children}) => {
       // create new Event
      const createEvent = (selectedContacts) => {
         const eventId = uuidV4()
+        const recipients = [...selectedContacts, {id: currentUser.uid, name: currentUser.displayName }]
+        const newEvent = { eventId, recipients, messages: [], selected: true}
+
+        socket.emit('new-event', newEvent)
 
         setEvents(prev => {
-          const recipients = [...selectedContacts, account]
-          const newEvent = { eventId, recipients, messages: [], selected: true}
           const oldEvents = prev.map( event => {
             const { eventId, recipients, messages } = event
             return { eventId, recipients, messages, selected: false}
@@ -96,7 +104,7 @@ export const ChatState = ({children}) => {
         })}
 
     return (
-        <ChatContext.Provider value={{account, setAccount, sendMessage, sendPrivateMessage, createEvent, events, setSelectedEventIndex, selectedEventIndex}}>
+        <ChatContext.Provider value={{currentUser, sendMessage, sendPrivateMessage, createEvent, events, setSelectedEventIndex, selectedEventIndex}}>
             {children}
         </ChatContext.Provider>
     );

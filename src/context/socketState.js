@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import io from 'socket.io-client'
+import { useAuth } from './authState'
 
 const SocketContext = React.createContext()
 
@@ -9,14 +10,12 @@ export function useSocket() {
 
 export const SocketState = ({children}) => {
      const [socket, setSocket] = useState()
+     const { currentUser } = useAuth()
 
      useEffect(async ()=> {
 
-        const JSONdata = await localStorage.getItem('chat-account')
-        const localAccount = await JSON.parse(JSONdata)
-
-        if (localAccount) {
-            const id = localAccount.id
+        if (currentUser) {
+            const id = currentUser.uid
             const newSocket = io(
                 'http://localhost:5000',
                 {query: { id }}

@@ -11,7 +11,7 @@ const EventModal = ({ closeModal }) => {
 
   function handleSubmit(e) {
     e.preventDefault()
-    createEvent(selectedContacts.map(({id, name}) => { return {id, name}}))
+    createEvent(selectedContacts.map(({userId, name}) => { return {id: userId, name}}))
     closeModal()
   }
 

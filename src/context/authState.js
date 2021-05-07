@@ -40,22 +40,14 @@ export function AuthState({ children }) {
     setAllUsers(allUsersData)
   },[])
 
-// getting user-data
+// getting user-contacts
   useEffect( async ()=> {
-    if(currentUser) {
+  if(currentUser) {
    const userData = await checkAccount(currentUser)
    setUserData(userData)
-   console.log('contacts: ', userData.contacts)
-
+   console.log('loading contacts: ', userData.contacts)
    const userContacts = userData.contacts
-
-   const contactsSelected = userContacts.map((contact, index) => {
-    const { userId, name, messages } = contact
-    const selected = index === selectedContactIndex
-    const newContact = { userId, name, messages, selected}
-    return newContact
-  })
-  setContacts(contactsSelected)
+  setContacts(userContacts)
   }
 },[currentUser])
 

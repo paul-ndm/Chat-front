@@ -18,32 +18,17 @@ export const ContactState = ({children}) => {
     )
     const [selectedContactIndex, setSelectedContactIndex] = useState(0)
 
-       // switch selected-property
-   useEffect(()=> {
-    const newContacts = contacts.map((contact, index) => {
-      const { userId, name, messages } = contact
-      const selected = index === selectedContactIndex
-      const newContact = { userId, name, messages, selected}
-      return newContact
-    })
-    setContacts(newContacts)
-   }, [selectedContactIndex])
-
    // add new Contact
     const createContact = ({userId, name}) => {
 
-        const newContact = { userId, name, messages: [], selected: true}
+        const newContact = { userId, name, messages: []}
 
         setContacts(prev => {
-            const oldContacts = prev.map( contact => 
-                {
-                const { userId, name, messages } = contact
-                return { userId, name, messages, selected: false}
-              })
-            return [...oldContacts, newContact]
+            return [...prev, newContact]
         })
         setSelectedContactIndex(contacts.length)
-    }
+        }
+
     // delete Contact locally
     const removeLocalContact = (contact) => {
         setContacts(prev => {

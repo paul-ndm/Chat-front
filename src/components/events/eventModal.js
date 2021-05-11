@@ -5,15 +5,27 @@ import { useChat } from '../../context/chatState'
 
 const EventModal = ({ closeModal }) => {
   const [selectedContacts, setSelectedContactIds] = useState([])
+  const [details, setDetails] = useState({
+    name: "",
+    place: "",
+    date: ""
+  })
+
+  const {name, place, date} = details
+
   const { contacts } = useContacts()
   const { createEvent } = useChat()
 
 
   function handleSubmit(e) {
     e.preventDefault()
-    createEvent(selectedContacts.map(({userId, name}) => { return {id: userId, name}}))
+    createEvent(selectedContacts.map(({userId, name}) => { return {id: userId, name}}), details)
     closeModal()
   }
+
+  const onChange = (event) => {
+    setDetails({ ...details, [event.target.name]: event.target.value });
+  };
 
   function handleCheckboxChange(contact) {
     setSelectedContactIds(prev => {
@@ -28,9 +40,16 @@ const EventModal = ({ closeModal }) => {
 
   return (
     <div key={'event-modal'}>
-      <Modal.Header closeButton>Create Conversation</Modal.Header>
+      <Modal.Header closeButton>New Event</Modal.Header>
       <Modal.Body key={'event-modal-body'}>
         <Form onSubmit={handleSubmit}>
+
+        <Form.Control type="text" name="name" placeholder="name" value={name} onChange={onChange} required />
+        <br/>
+        <Form.Control type="text" name="place" placeholder="place" value={place} onChange={onChange} required />
+        <br/>
+        <Form.Control type="text" name="date" placeholder="date" value={date} onChange={onChange} required />
+        <br/>
           {contacts.map((contact, index) => (
             <Form.Group controlId={contact.id} key={contact.id}>
               <Form.Check
@@ -42,7 +61,7 @@ const EventModal = ({ closeModal }) => {
               />
             </Form.Group>
           ))}
-          <Button type="submit">Create</Button>
+          <Button type="submit" className="sidebar sideButton"  >Create</Button>
         </Form>
       </Modal.Body>
     </div>

@@ -44,7 +44,7 @@ const ContactModal = ({closeModal}) => {
           <Form.Label>Search for Users</Form.Label>
           <Form.Control type="text" value={input} onChange={e=> filterByInput(e.target.value)} required />
         </Form.Group>
-        <Button type="submit">Add Contact</Button>
+        <Button type="submit">Add User</Button>
       </Form>
 
       <ListGroup variant="flush">

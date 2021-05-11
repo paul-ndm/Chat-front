@@ -2,9 +2,7 @@ import { fireBase, db } from "../firebase/firebase"
 
 
 export const checkAccount = (currentUser) => {
-
   const docName = currentUser.displayName + ' '+ currentUser.uid
-
   return db.collection('user-info').doc(docName).get().then((doc)=> {
     if (doc.exists) {
         return doc.data()
@@ -61,7 +59,22 @@ export const getEventsForUser = async (userId) => {
       console.log(err)
   }}
 
-  // export const getAllUsers
+  export const leaveEvent = async (userId, userName, eventId) => {
+    const data = {userId, userName, eventId}
+
+    const options = {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data)
+    }
+  
+      try {
+        const res = await fetch(`http://localhost:5000/events`, options)
+        const data = await res.json()
+        return data.results
+      } catch (err) {
+        console.log(err)
+    }}
 
   // not in use
 export const getAllEvents = async () => {

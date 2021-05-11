@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import { Container, Form, Button } from 'react-bootstrap'
 import { v4 as uuidV4 } from 'uuid'
-import { useChat } from '../context/chatState'
+import { useChat } from '../../context/chatState'
 
 const Login =() => {
 
@@ -20,7 +20,7 @@ const Login =() => {
 
     return (
         <Container className="align-items-center d-flex" style={{ height: '100vh' }}>
-        <Form className="w-100" onSubmit={handleSubmit}>
+        <Form className="w-100 sidebar sideButton" onSubmit={handleSubmit}>
             <Form.Group>
             <Form.Label>Enter Chat</Form.Label>
             <Form.Control type ="text" ref={idRef} required />

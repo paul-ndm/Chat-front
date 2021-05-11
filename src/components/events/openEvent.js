@@ -27,10 +27,14 @@ export default function OpenEvent () {
   }
 
   return (
-    <div className="d-flex flex-column flex-grow-1">
-      <div className="flex-grow-1 overflow-auto">
+
+    
+
+    <div className="d-flex m-2 p-2 flex-column flex-grow-1 chatWindow " style={{ maxHeight: '600px'}}>
+      <div className=" flex-grow-1 overflow-auto">
         <div className="d-flex flex-column align-items-start justify-content-end px-3">
-          {events[selectedEventIndex].messages.map((message, index) => {
+           {
+            events[selectedEventIndex] !== undefined  && events[selectedEventIndex].messages.map((message, index) => {
             const fromMe = currentUser.uid === message.id
             const lastMessage = events[selectedEventIndex].messages.length - 1 === index
             return (
@@ -40,33 +44,38 @@ export default function OpenEvent () {
                 className={`my-1 d-flex flex-column ${fromMe ? 'align-self-end align-items-end' : 'align-items-start'}`}
               >
                 <div
-                  className={`rounded px-2 py-1 ${fromMe ? 'bg-primary text-white' : 'border'}`}>
+                  className={`rounded px-2 py-1 ${fromMe ? 'myMessage' : 'message'}`}>
                   {message.text}
                 </div>
                 <div className={`text-muted small ${fromMe ? 'text-right' : ''}`}>
-                  {fromMe ? 'You' : message.author}
+                  {fromMe ? 'You' : message.name}
                 </div>
               </div>
             )
-          })}
+          })
+        }
         </div>
       </div>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group className="m-2">
+
+      <Form onSubmit={handleSubmit} style={{ height: '75px'}} className="m-2 chatInput">
+        <Form.Group >
           <InputGroup>
             <Form.Control
               as="textarea"
               required
               value={text}
               onChange={e => setText(e.target.value)}
-              style={{ height: '75px', resize: 'none' }}
+              style={{ height: '75px', resize: 'none',borderRadius: '10px' }}
             />
-            <InputGroup.Append>
-              <Button type="submit">Send</Button>
-            </InputGroup.Append>
+            
+              <Button className=" m-1 sidebar sideButton" type="submit">Send</Button>
+           
           </InputGroup>
         </Form.Group>
       </Form>
+      
     </div>
-  )
+  
+
+    )
 }

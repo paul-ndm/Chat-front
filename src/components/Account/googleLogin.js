@@ -14,8 +14,8 @@ const GoogleLogIn =() => {
           style={{minHeight: "100vh"}}>
           <div className="w-100" style={{maxWidth: "400px"}}> 
           {error && <Alert variant="danger">{error}</Alert>}
-          <Button onClick={googleSignIn} className="w-100" type="submit">
-            Sing in with google
+          <Button onClick={googleSignIn} className="w-100 sidebar sideButton" type="submit">
+          Sign in with google
             </Button>
           </div>
           </Container>

@@ -36,7 +36,9 @@ export function AuthState({ children }) {
   }, [])
 // get all users from firestore
   useEffect(async()=> {
+
     const allUsersData = await getUsers()
+
     setAllUsers(allUsersData)
   },[])
 

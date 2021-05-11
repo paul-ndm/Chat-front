@@ -31,15 +31,36 @@ export const ChatState = ({children}) => {
     useEffect(()=> {
       if (socket == null) return 
 
-      socket.on('receive-message', ({eventId, recipients, sender, message}) => {
+      socket.on('added-Member', ({eventId, newMembers}) => {
+        console.log('new Members:', newMembers ,eventId  )
         setEvents(prev => {
           return prev.map(event => {
+             if(event.eventId === eventId) {
+               newMembers.forEach(member => {
+                event.recipients.push(member)
+               })
+               return event
+             } else {
+               return event
+             }})})
+
+
+      })
+
+      socket.on('receive-message', ({eventId, recipients, sender, message}) => {
+        setEvents(prev => {
+          const updatedEvent =  prev.map(event => {
              if(event.eventId === eventId) {
               event.messages.push(message)
                return event
              } else {
                return event
-             }})})
+             }})
+          console.log(updatedEvent)
+            }
+             
+             
+             )
       })
 
       socket.on("receive-private-message", ({recipientId, text, sender}) => {
@@ -58,6 +79,13 @@ export const ChatState = ({children}) => {
              return spreadContacts
             })
             })
+
+      socket.on("new-event", createdEvent => {
+        setEvents(prev => {
+          setSelectedEventIndex(prev.length)
+          return [...prev, createdEvent ]
+        })
+      })
           
   
       return () => {socket.off('receive-message')
@@ -74,17 +102,29 @@ export const ChatState = ({children}) => {
         }
 
       // create new Event
-     const createEvent = (selectedContacts) => {
+     const createEvent = (selectedContacts, details) => {
         const eventId = uuidV4()
+        const { name, place, date } = details
         const recipients = [...selectedContacts, {id: currentUser.uid, name: currentUser.displayName }]
-        const newEvent = { eventId, recipients, messages: []}
+        const newEvent = { eventId, recipients, messages: [], name, place, date}
 
         socket.emit('new-event', newEvent)
 
         setEvents(prev => {
           setSelectedEventIndex(prev.length)
           return [...prev, newEvent ]
-        })}
+        })
+      }
+
+      const addMember = (newMembers) => {
+
+        socket.emit('add-member', { event: events[selectedEventIndex], newMembers })
+
+        newMembers.forEach( member => {
+          events[selectedEventIndex].recipients.push(member)
+        })
+
+      }
 
           // delete Contact locally
     const removeLocalEvent = (event) => {
@@ -97,7 +137,7 @@ export const ChatState = ({children}) => {
   }
 
     return (
-        <ChatContext.Provider value={{currentUser, sendMessage, sendPrivateMessage, createEvent, events, removeLocalEvent, setSelectedEventIndex, selectedEventIndex}}>
+        <ChatContext.Provider value={{currentUser, addMember, sendMessage, sendPrivateMessage, createEvent, events, removeLocalEvent, setSelectedEventIndex, selectedEventIndex}}>
             {children}
         </ChatContext.Provider>
     );

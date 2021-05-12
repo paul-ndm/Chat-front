@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react"
-import { fireBase, auth, googleProvider, db } from "../firebase/firebase"
-import {checkAccount, createAccount, getUsers} from '../utils/api'
-import { v4 as uuidV4 } from 'uuid'
+import { auth, googleProvider} from "../firebase/firebase"
+import {checkAccount, getUsers} from '../utils/api'
+
 import { useContacts } from './contactState'
 
 const AuthContext = React.createContext()
@@ -15,7 +15,7 @@ export function AuthState({ children }) {
   const [loading, setLoading] = useState(true)
   const [userData, setUserData] = useState()
   const [allUsers, setAllUsers] = useState()
-  const { setContacts, selectedContactIndex } = useContacts()
+  const { setContacts } = useContacts()
 
   function signup(email, password) {
     console.log(email, password)
@@ -36,9 +36,7 @@ export function AuthState({ children }) {
   }, [])
 // get all users from firestore
   useEffect(async()=> {
-
     const allUsersData = await getUsers()
-
     setAllUsers(allUsersData)
   },[])
 

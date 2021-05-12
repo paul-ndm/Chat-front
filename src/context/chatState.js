@@ -15,7 +15,7 @@ export const ChatState = ({children}) => {
     const [events, setEvents ] = useState([])
     const [selectedEventIndex, setSelectedEventIndex] = useState(0)
     const { socket } = useSocket()
-    const { setContacts, contacts } = useContacts()
+    const { setContacts } = useContacts()
     const { currentUser } = useAuth()
 
    // getting all events of user
@@ -23,9 +23,6 @@ export const ChatState = ({children}) => {
      if(currentUser){
     const joinedEvents = await getEventsForUser(currentUser.uid)
     setEvents(joinedEvents)}
-
-    console.log('server:', process.env.REACT_APP_FIREBASE_API_KEY)
-
    },[currentUser])
 
 
@@ -68,10 +65,8 @@ export const ChatState = ({children}) => {
       })
 
       socket.on('leaving-event', ({eventId, userId}) => {
-        
         console.log('leaving:', userId )
         setEvents(prev => prev.map(event => event.eventId === eventId ? ({...event, recipients: [...event.recipients.filter(recipient => recipient.id !== userId)
-        
         ]}): event))
       } )
           
@@ -111,9 +106,7 @@ export const ChatState = ({children}) => {
       }
 
       const addMember = (newMembers) => {
-
         socket.emit('add-member', { event: events[selectedEventIndex], newMembers })
-
         newMembers.forEach( member => {
           events[selectedEventIndex].recipients.push(member)
         })

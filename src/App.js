@@ -3,11 +3,8 @@ import OpenPrivatChat from './components/contacts/openPrivatChat'
 import OpenEvent from './components/events/openEvent'
 import { useAuth } from './context/authState'
 import { Switch, Route, Redirect } from "react-router-dom";
-import { Container} from 'react-bootstrap'
-import Signup from './components/Account/Signup'
 import GoogleLogIn from './components/Account/googleLogin'
 import './App.css';
-import Navbar from './components/navbar'
 import Sidebar from './components/sidebar'
 import RightSide from './components/rightSide'
 
@@ -18,15 +15,12 @@ function App() {
 
  const chat = (
   
-
-  
   <div className="d-flex flex-row" style={{minHeight: '600px'}}>
   <Switch> 
 
   <Route exact path="/">
     <Redirect to="/events" />
   </Route>
-
 
   <Route path="/events">
     <Sidebar/>
@@ -40,13 +34,8 @@ function App() {
     <RightSide/>
   </Route>
 
-
   </Switch>
   </div>
- 
-  
-
-
  )
 
   return (

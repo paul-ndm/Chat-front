@@ -1,4 +1,5 @@
 import { fireBase, db } from "../firebase/firebase"
+import { URL } from "../socket/socket"
 
 
 export const checkAccount = (currentUser) => {
@@ -51,7 +52,7 @@ export const deleteContactInDb = async (currentUser, contact) => {
 export const getEventsForUser = async (userId) => {
     try {
       console.log('getting events for:', userId)
-      const res = await fetch(`http://localhost:5000/events/${userId}`)
+      const res = await fetch(`${URL}/events/${userId}`)
       const data = await res.json()
       console.log('found events: ', data)
       return data
@@ -69,7 +70,7 @@ export const getEventsForUser = async (userId) => {
     }
   
       try {
-        const res = await fetch(`http://localhost:5000/events`, options)
+        const res = await fetch(`${URL}/events`, options)
         const data = await res.json()
         return data.results
       } catch (err) {
@@ -79,7 +80,7 @@ export const getEventsForUser = async (userId) => {
   // not in use
 export const getAllEvents = async () => {
   try {
-    const res = await fetch(`http://localhost:5000/events`)
+    const res = await fetch(`${URL}/events`)
     const data = await res.json()
     return data.results
   } catch (err) {

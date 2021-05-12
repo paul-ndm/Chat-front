@@ -9,8 +9,8 @@
   padding: 2;
   height: 100%;
   width: 100%;
-  background-color: #36384c;
-  background-color: #ebeced;
+
+  background-color: #fafafa;
 }
 
 .chatInput {
@@ -19,19 +19,19 @@
 }
 
 .myMessage {
-  border: 2px solid #ebeced;
+  border: 2px solid #fafafa;
   background-color: #4c586f;
-  color: #ebeced;
+  color: #fafafa;
 }
 
 .message {
-  background-color: #ebeced;
+  background-color: #fafafa;
   color: #4c586f;
   border: 2px solid #4c586f;
 }
 
 .sidebar.active {
-  background-color: #ebeced;
+  background-color: #fafafa;
   color: #4c586f;
   border: 5px double #4c586f;
 }
@@ -39,9 +39,9 @@
 .sidebar {
   margin: 1;
   border-radius: 10px;
-  border: 2px solid #ebeced;
+  border: 2px solid #fafafa;
   background-color: #4c586f;
-  color: #ebeced;
+  color: #fafafa;
 }
 
 .sideButton {
@@ -49,12 +49,21 @@
 }
 
 .sideButton:hover {
-  background-color: #a2aab0;
+  background-color: #709fb0;
   border: 2px solid #3e3e3b;
+}
+
+.deleteButton {
+  border-radius: 10px;
+}
+
+.deleteButton:hover {
+  background-color: #df0000;
+  border: 2px solid #36384c;
 }
 
 .sideButton.active {
   border-radius: 10px;
-  background-color: #a2aab0 !important;
+  background-color: #fafafa !important;
   border: 2px solid #3e3e3b !important;
 }

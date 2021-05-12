@@ -18,11 +18,10 @@ function App() {
 
  const chat = (
   
-  <React.Fragment>
-  <Switch>
-  <div className="d-flex flex-row" style={{minHeight: '600px'}}>
 
-  <Sidebar/>
+  
+  <div className="d-flex flex-row" style={{minHeight: '600px'}}>
+  <Switch> 
 
   <Route exact path="/">
     <Redirect to="/events" />
@@ -30,18 +29,21 @@ function App() {
 
 
   <Route path="/events">
+    <Sidebar/>
     <OpenEvent />
+    <RightSide/>
   </Route>
 
   <Route path='/contacts'>
+    <Sidebar/>
     <OpenPrivatChat />
+    <RightSide/>
   </Route>
 
-  <RightSide/>
 
-  </div>
   </Switch>
-  </React.Fragment>
+  </div>
+ 
   
 
 

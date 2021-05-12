@@ -23,9 +23,9 @@ const ContactsPage = () => {
 
       <div className="mt-2">
       
-      <Button className="sidebar sideButton d-flex justify-content-center w-100" style={{ height: '45px'}} onClick={() => setShowModal(true)}>
-      <Plus style={{position: 'relative', minWidth: '10px'}} size={'35px'} />
-      </Button>
+      <button className=" pb-1 sidebar sideButton d-flex justify-content-center w-100" style={{ height: '45px'}} onClick={() => setShowModal(true)}>
+      <Plus size={'45px'} />
+      </button>
   
         <Modal show={showModal} onHide={closeModal}>
           <ContactModal closeModal={closeModal}/>

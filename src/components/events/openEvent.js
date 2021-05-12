@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react'
 import { Form, InputGroup, Button } from 'react-bootstrap'
 import { useChat } from '../../context/chatState';
 import { useAuth } from '../../context/authState'
+import { ArrowRightSquare } from 'react-bootstrap-icons'
 
 export default function OpenEvent () {
   const [text, setText] = useState('')
@@ -22,7 +23,8 @@ export default function OpenEvent () {
       events[selectedEventIndex].recipients.map(r => r.id),
       text
     )
-    events[selectedEventIndex].messages.push({text, id: currentUser.uid, author: currentUser.displayName })
+    
+    setEvents(prev => prev.map(event => event.eventId === events[selectedEventIndex].eventId ? ({...event, messages: [...event.messages, {text, id: currentUser.uid, author: currentUser.displayName }]}): event))
     setText('')
   }
 
@@ -34,25 +36,25 @@ export default function OpenEvent () {
       <div className=" flex-grow-1 overflow-auto">
         <div className="d-flex flex-column align-items-start justify-content-end px-3">
            {
-            events[selectedEventIndex] !== undefined  && events[selectedEventIndex].messages.map((message, index) => {
-            const fromMe = currentUser.uid === message.id
-            const lastMessage = events[selectedEventIndex].messages.length - 1 === index
-            return (
-              <div
-                ref={lastMessage ? setRef : null}
-                key={index}
-                className={`my-1 d-flex flex-column ${fromMe ? 'align-self-end align-items-end' : 'align-items-start'}`}
-              >
+            events && events[selectedEventIndex] !== undefined  ? events[selectedEventIndex].messages.map((message, index) => {
+              const fromMe = currentUser.uid === message.id
+              const lastMessage = events[selectedEventIndex].messages.length - 1 === index
+              return (
                 <div
-                  className={`rounded px-2 py-1 ${fromMe ? 'myMessage' : 'message'}`}>
-                  {message.text}
+                  ref={lastMessage ? setRef : null}
+                  key={index}
+                  className={`my-1 d-flex flex-column ${fromMe ? 'align-self-end align-items-end' : 'align-items-start'}`}
+                >
+                  <div
+                    className={`rounded px-2 py-1 ${fromMe ? 'myMessage' : 'message'}`}>
+                    {message.text}
+                  </div>
+                  <div className={`text-muted small ${fromMe ? 'text-right' : ''}`}>
+                    {fromMe ? 'You' : message.name}
+                  </div>
                 </div>
-                <div className={`text-muted small ${fromMe ? 'text-right' : ''}`}>
-                  {fromMe ? 'You' : message.name}
-                </div>
-              </div>
-            )
-          })
+              )
+            }): 'No events'
         }
         </div>
       </div>
@@ -68,7 +70,9 @@ export default function OpenEvent () {
               style={{ height: '75px', resize: 'none',borderRadius: '10px' }}
             />
             
-              <Button className=" m-1 sidebar sideButton" type="submit">Send</Button>
+              <Button className=" m-1 sidebar sideButton" style={{ height: '70px', width: '70px'}} type="submit">
+              <ArrowRightSquare size={45}/>
+              </Button>
            
           </InputGroup>
         </Form.Group>

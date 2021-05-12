@@ -24,6 +24,8 @@ export const ChatState = ({children}) => {
     const joinedEvents = await getEventsForUser(currentUser.uid)
     setEvents(joinedEvents)}
 
+    console.log('server:', process.env.REACT_APP_FIREBASE_API_KEY)
+
    },[currentUser])
 
 
@@ -32,39 +34,17 @@ export const ChatState = ({children}) => {
       if (socket == null) return 
 
       socket.on('added-Member', ({eventId, newMembers}) => {
-        console.log('new Members:', newMembers ,eventId  )
-        setEvents(prev => {
-          return prev.map(event => {
-             if(event.eventId === eventId) {
-               newMembers.forEach(member => {
-                event.recipients.push(member)
-               })
-               return event
-             } else {
-               return event
-             }})})
-
-
+        newMembers.forEach( member => {
+          setEvents(prev => prev.map(event => event.eventId === eventId ? ({...event, recipients: [...event.recipients, member]}): event))
+        })
       })
 
       socket.on('receive-message', ({eventId, recipients, sender, message}) => {
-        setEvents(prev => {
-          const updatedEvent =  prev.map(event => {
-             if(event.eventId === eventId) {
-              event.messages.push(message)
-               return event
-             } else {
-               return event
-             }})
-          console.log(updatedEvent)
-            }
-             
-             
-             )
+        console.log(eventId, recipients, sender, message)
+        setEvents(prev => prev.map(event => event.eventId === eventId ? ({...event, messages: [...event.messages, message]}): event))
       })
 
       socket.on("receive-private-message", ({recipientId, text, sender}) => {
-
         setContacts(prev => {
           const spreadContacts = prev.map(c => ({...c, messages: [...c.messages]}))
           spreadContacts.map(contact => {
@@ -86,6 +66,14 @@ export const ChatState = ({children}) => {
           return [...prev, createdEvent ]
         })
       })
+
+      socket.on('leaving-event', ({eventId, userId}) => {
+        
+        console.log('leaving:', userId )
+        setEvents(prev => prev.map(event => event.eventId === eventId ? ({...event, recipients: [...event.recipients.filter(recipient => recipient.id !== userId)
+        
+        ]}): event))
+      } )
           
   
       return () => {socket.off('receive-message')
@@ -99,6 +87,12 @@ export const ChatState = ({children}) => {
 
       const sendPrivateMessage = (recipientId, text) => {
         socket.emit('private-message', { recipientId, text})
+        }
+    
+    // leaving
+        const leavingEvent = (event, uid) => {
+          console.log(uid)
+          socket.emit('leaving-event', {event, userId: uid})
         }
 
       // create new Event
@@ -137,7 +131,7 @@ export const ChatState = ({children}) => {
   }
 
     return (
-        <ChatContext.Provider value={{currentUser, addMember, sendMessage, sendPrivateMessage, createEvent, events, removeLocalEvent, setSelectedEventIndex, selectedEventIndex}}>
+        <ChatContext.Provider value={{currentUser, addMember, leavingEvent, sendMessage, sendPrivateMessage, createEvent, events, setEvents, removeLocalEvent, setSelectedEventIndex, selectedEventIndex}}>
             {children}
         </ChatContext.Provider>
     );

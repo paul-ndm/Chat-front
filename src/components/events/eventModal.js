@@ -1,30 +1,37 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Modal, Form, Button } from 'react-bootstrap'
 import { useContacts } from '../../context/contactState'
 import { useChat } from '../../context/chatState'
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+
 
 const EventModal = ({ closeModal }) => {
   const [selectedContacts, setSelectedContactIds] = useState([])
   const [details, setDetails] = useState({
     name: "",
     place: "",
-    date: ""
   })
 
-  const {name, place, date} = details
+  const {name, place } = details
 
   const { contacts } = useContacts()
   const { createEvent } = useChat()
 
 
+
   function handleSubmit(e) {
     e.preventDefault()
+    setDetails(details.date = startDate.toString() )
+    console.log(details)
     createEvent(selectedContacts.map(({userId, name}) => { return {id: userId, name}}), details)
     closeModal()
   }
 
   const onChange = (event) => {
     setDetails({ ...details, [event.target.name]: event.target.value });
+
   };
 
   function handleCheckboxChange(contact) {
@@ -38,17 +45,31 @@ const EventModal = ({ closeModal }) => {
     })
   }
 
+
+  const [startDate, setStartDate] = useState(new Date())
+  const filterPassedTime = time => {
+    const currentDate = new Date();
+    const selectedDate = new Date(time);
+
+    return currentDate.getTime() < selectedDate.getTime();
+  }
+
   return (
     <div key={'event-modal'}>
       <Modal.Header closeButton>New Event</Modal.Header>
       <Modal.Body key={'event-modal-body'}>
         <Form onSubmit={handleSubmit}>
-
         <Form.Control type="text" name="name" placeholder="name" value={name} onChange={onChange} required />
         <br/>
         <Form.Control type="text" name="place" placeholder="place" value={place} onChange={onChange} required />
         <br/>
-        <Form.Control type="text" name="date" placeholder="date" value={date} onChange={onChange} required />
+        <DatePicker
+          selected={startDate}
+          onChange={date => setStartDate(date)}
+          showTimeSelect
+          filterTime={filterPassedTime}
+          dateFormat="MMMM d, yyyy h:mm aa"
+      />
         <br/>
           {contacts.map((contact, index) => (
             <Form.Group controlId={contact.id} key={contact.id}>

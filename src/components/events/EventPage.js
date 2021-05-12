@@ -16,10 +16,10 @@ const EventPage = () => {
 
     return (
 
-      <div className="mt-2">
-      <Button className="sidebar sideButton d-flex justify-content-center w-100" style={{ height: '45px'}} onClick={() => setShowModal(true)}>
-      <Plus style={{position: 'relative', minWidth: '10px'}} size={'35px'} />
-      </Button>
+      <div className="mt-3 mb-3">
+      <button className="sidebar sideButton d-flex flex-col justify-content-center w-100" style={{ height: '48px'}} onClick={() => setShowModal(true)}>
+      <Plus  size={45} />
+      </button>
   
         <Modal show={showModal} onHide={closeModal}>
           <EventModal closeModal={closeModal}/>

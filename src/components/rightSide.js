@@ -12,7 +12,7 @@ const RightSide = () => {
         <div className=" mt-2 ml-3 d-flex flex-column " style={{width: '250px', height: 'auto'}}>
 
         <Route path="/events">
-            { events[selectedEventIndex] && <EventInfo />}
+            { events !== undefined && <EventInfo />}
         </Route>
         
             

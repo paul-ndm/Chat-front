@@ -40,4 +40,3 @@ const ContactList = () => {
 
 export default ContactList;
 
-// <Button key={index + contact.userId} variant="danger" onClick={()=> removeContact(contact)} className="rounded-0">X</Button>

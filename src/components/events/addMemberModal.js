@@ -33,7 +33,7 @@ const AddMemberModal = ({ closeModal }) => {
 
   return (
     <div key={'addmember-modal'}>
-      <Modal.Header closeButton>New Event</Modal.Header>
+      <Modal.Header closeButton>Add Members</Modal.Header>
       <Modal.Body key={'event-modal-body'}>
         <Form onSubmit={handleSubmit}>
           {contacts.map((contact, index) => {

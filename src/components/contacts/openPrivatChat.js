@@ -4,6 +4,7 @@ import { useContacts } from '../../context/contactState';
 import { useChat } from '../../context/chatState';
 import { useAuth } from '../../context/authState'
 import { updatePrivateChat } from '../../utils/api'
+import { ArrowRightSquare } from 'react-bootstrap-icons'
 
 
 export default function OpenPrivatChat () {
@@ -36,10 +37,9 @@ export default function OpenPrivatChat () {
 
   return (
 
-    
-
-    <div className="d-flex m-2 flex-column flex-grow-1 chatWindow " style={{ maxHeight: '600px'}}>
-      <div className=" flex-grow-1 overflow-auto">
+ 
+  <div className="d-flex m-2 p-2 flex-column flex-grow-1 chatWindow " style={{ maxHeight: '600px'}}>
+   <div className=" flex-grow-1 overflow-auto">
         <div className="d-flex flex-column align-items-start justify-content-end px-3">
           {contacts && contacts[selectedContactIndex].messages.map((message, index) => {
             const fromMe = currentUser.uid === message.id
@@ -74,13 +74,15 @@ export default function OpenPrivatChat () {
               style={{ height: '75px', resize: 'none',borderRadius: '10px' }}
             />
             
-              <Button className=" m-1 sidebar sideButton" type="submit">Send</Button>
+            <Button className=" m-1 sidebar sideButton" style={{ height: '70px', width: '70px'}} type="submit">
+            <ArrowRightSquare size={45}/>
+            </Button>
           </InputGroup>
         </Form.Group>
       </Form>
-      
     </div>
-  
+
+
 
   )
 }

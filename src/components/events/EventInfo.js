@@ -5,10 +5,12 @@ import { useAuth } from '../../context/authState'
 import { leaveEvent } from '../../utils/api'
 import { BoxArrowLeft, Plus, CalendarEvent, GeoAlt } from 'react-bootstrap-icons'
 import AddMemberModal from './addMemberModal'
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const EventInfo = () => {
 
-    const { events, selectedEventIndex, setSelectedEventIndex, removeLocalEvent } = useChat()
+    const { events, selectedEventIndex, removeLocalEvent, leavingEvent } = useChat()
     const { currentUser } = useAuth()
     const [showModal, setShowModal] = useState(false)
 
@@ -16,6 +18,7 @@ const EventInfo = () => {
         removeLocalEvent(event)
         const { uid, displayName } = currentUser
         leaveEvent(uid, displayName, event.eventId)
+        leavingEvent(event, uid)
     }
 
     function closeModal() {
@@ -25,47 +28,53 @@ const EventInfo = () => {
 
     return (
         <div>
+        <Card className="mr-3" style={{backgroundColor: '#fafafa'}}>
+        <Card.Header className="d-flex flex-row">
 
-        <div className="d-flex flex-row">
-        <Button className="sidebar sideButton " onClick={()=> leave(events[selectedEventIndex])}>
+   
+        <button className="sidebar sideButton " onClick={()=> leave(events[selectedEventIndex])}>
         <BoxArrowLeft size={50} />
-        </Button>
+        </button>
         <br/>
 
-        <Button className="sidebar sideButton" onClick={() => setShowModal(true)}>
+        <button className="sidebar sideButton" onClick={() => setShowModal(true)}>
         <Plus size={50} />
-        </Button>
+        </button>
     
           <Modal show={showModal} onHide={closeModal}>
             <AddMemberModal closeModal={closeModal}/>
           </Modal>
 
-
-        </div>
-
-
+        </Card.Header>
+        <Card.Body style={{backgroundColor: '#fafafa'}}>
+        <Card.Title>
+        {events[selectedEventIndex] && events[selectedEventIndex].name}
+        </Card.Title>
+        <Card.Subtitle className="text-muted">{events[selectedEventIndex] && events[selectedEventIndex].place}
+        </Card.Subtitle>
         <br/>
 
-        <h2>{events[selectedEventIndex].name}</h2>
-
-        <h3>{events[selectedEventIndex].place}</h3>
-
-        <h3>{events[selectedEventIndex].date}</h3>
-
-
+        <Card.Subtitle>
+        {events[selectedEventIndex] && events[selectedEventIndex].date.slice(0, 16) + ' | ' + events[selectedEventIndex].date.slice(16, 21)}
+        </Card.Subtitle>
 
         <ListGroup variant="flush">
         {events[selectedEventIndex] && events[selectedEventIndex].recipients.map((recipient, index) => (
-            <ListGroup horizontal={'sm'} key={events[selectedEventIndex].eventId + index}>
+    
             <ListGroup.Item
-            style={{borderRadius: '10px'}}
-            key={'member', index, events[selectedEventIndex].eventId}
+            style={{ backgroundColor: '#fafafa'}}
+            key={recipient.name + index + events[selectedEventIndex].eventId}
             >
             {recipient.name}
             </ListGroup.Item>
-            </ListGroup>
+
             ))}
         </ListGroup>
+
+
+
+        </Card.Body>
+        </Card>
 
         </div>
 
@@ -75,3 +84,51 @@ const EventInfo = () => {
 export default EventInfo;
 
 // <Button key={index + event.eventId} className="custom-btn" onClick={()=> leave(event)} className="rounded-0">X</Button>
+
+
+// <div className="d-flex flex-row">
+//         <Button className="sidebar sideButton " onClick={()=> leave(events[selectedEventIndex])}>
+//         <BoxArrowLeft size={50} />
+//         </Button>
+//         <br/>
+
+//         <Button className="sidebar sideButton" onClick={() => setShowModal(true)}>
+//         <Plus size={50} />
+//         </Button>
+    
+//           <Modal show={showModal} onHide={closeModal}>
+//             <AddMemberModal closeModal={closeModal}/>
+//           </Modal>
+
+
+//         </div>
+
+
+//         <br/>
+
+//         <h2>{events[selectedEventIndex].name}</h2>
+
+//         <h3>{events[selectedEventIndex].place}</h3>
+
+//         <DatePicker
+//         selected={events[selectedEventIndex].date}
+//         showTimeSelect
+//         dateFormat="MMMM d, yyyy h:mm aa"
+//         />
+
+
+
+
+
+//         <ListGroup variant="flush">
+//         {events[selectedEventIndex] && events[selectedEventIndex].recipients.map((recipient, index) => (
+//             <ListGroup horizontal={'sm'} key={events[selectedEventIndex].eventId + index}>
+//             <ListGroup.Item
+//             style={{borderRadius: '10px'}}
+//             key={'member', index, events[selectedEventIndex].eventId}
+//             >
+//             {recipient.name}
+//             </ListGroup.Item>
+//             </ListGroup>
+//             ))}
+//         </ListGroup>

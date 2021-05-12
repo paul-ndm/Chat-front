@@ -19,10 +19,15 @@ export const ChatState = ({children}) => {
     const { currentUser } = useAuth()
 
    // getting all events of user
-   useEffect(async()=> {
+   useEffect(()=> {
+
      if(currentUser){
+    (async() => {
     const joinedEvents = await getEventsForUser(currentUser.uid)
     setEvents(joinedEvents)}
+    )()
+    }
+
    },[currentUser])
 
 
@@ -54,12 +59,13 @@ export const ChatState = ({children}) => {
              }})
              updatePrivateChat(currentUser, spreadContacts)
              return spreadContacts
+
+
             })
             })
 
       socket.on("new-event", createdEvent => {
         setEvents(prev => {
-          setSelectedEventIndex(prev.length)
           return [...prev, createdEvent ]
         })
       })
@@ -70,7 +76,6 @@ export const ChatState = ({children}) => {
         ]}): event))
       } )
           
-  
       return () => {socket.off('receive-message')
                     socket.off("receive-private-message")}
     },[socket])
@@ -99,10 +104,15 @@ export const ChatState = ({children}) => {
 
         socket.emit('new-event', newEvent)
 
-        setEvents(prev => {
-          setSelectedEventIndex(prev.length)
-          return [...prev, newEvent ]
-        })
+        if(events !== undefined ) {
+          setEvents(prev => {
+            return [...prev, newEvent ]
+          })
+          setSelectedEventIndex(events.length)
+        } else {
+          setEvents([newEvent])
+        }
+
       }
 
       const addMember = (newMembers) => {

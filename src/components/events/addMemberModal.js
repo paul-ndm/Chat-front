@@ -41,14 +41,18 @@ const AddMemberModal = ({ closeModal }) => {
               return (
             <Form.Group controlId={contact.id} key={contact.id}>
             <Form.Check
-            key={'checkbox', contact.id}
+            key={'checkbox' + contact.id}
               type="checkbox"
               value={selectedContacts.includes(contact)}
               label={contact.name}
               onChange={() => handleCheckboxChange(contact)}
             />
           </Form.Group>
-              )}}
+              )} else {
+                return ''
+              }
+
+            }
             )}
           <Button type="add" className="sidebar sideButton"  >add</Button>
         </Form>

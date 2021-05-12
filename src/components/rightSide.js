@@ -1,11 +1,11 @@
 import React from 'react';
-import { NavLink, Route } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import EventInfo from './events/EventInfo'
 import { useChat } from './../context/chatState';
 
 const RightSide = () => {
 
-    const { events, selectedEventIndex, setSelectedEventIndex, removeLocalEvent } = useChat()
+    const { events} = useChat()
 
 
     return (

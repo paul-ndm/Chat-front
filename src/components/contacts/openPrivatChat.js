@@ -41,7 +41,7 @@ export default function OpenPrivatChat () {
   <div className="d-flex m-2 p-2 flex-column flex-grow-1 chatWindow " style={{ maxHeight: '600px'}}>
    <div className=" flex-grow-1 overflow-auto">
         <div className="d-flex flex-column align-items-start justify-content-end px-3">
-          {contacts && contacts[selectedContactIndex].messages.map((message, index) => {
+          {contacts[selectedContactIndex] && contacts[selectedContactIndex].messages !== undefined ? contacts[selectedContactIndex].messages.map((message, index) => {
             const fromMe = currentUser.uid === message.id
             const lastMessage = contacts[selectedContactIndex].messages.length - 1 === index
             return (
@@ -59,7 +59,10 @@ export default function OpenPrivatChat () {
                 </div>
               </div>
             )
-          })}
+          })  : ''
+
+        
+        }
         </div>
       </div>
 

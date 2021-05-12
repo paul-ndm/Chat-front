@@ -35,19 +35,22 @@ export function AuthState({ children }) {
     return unsubscribe
   }, [])
 // get all users from firestore
-  useEffect(async()=> {
-    const allUsersData = await getUsers()
-    setAllUsers(allUsersData)
+  useEffect(()=> {
+
+    (async() => {const allUsersData = await getUsers()
+    setAllUsers(allUsersData)})()
+
   },[])
 
 // getting user-contacts
-  useEffect( async ()=> {
+  useEffect( ()=> {
   if(currentUser) {
-   const userData = await checkAccount(currentUser)
+
+   (async()=>{const userData = await checkAccount(currentUser)
    setUserData(userData)
    console.log('loading contacts: ', userData.contacts)
    const userContacts = userData.contacts
-  setContacts(userContacts)
+    setContacts(userContacts)})()
   }
 },[currentUser])
 

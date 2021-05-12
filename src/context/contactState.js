@@ -1,6 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
-
-
+import React, { useState, useContext } from 'react';
 
 const ContactContext = React.createContext()
 
@@ -14,12 +12,12 @@ export const ContactState = ({children}) => {
     const [selectedContactIndex, setSelectedContactIndex] = useState(0)
 
    // add new Contact
-    const createContact = ({userId, name}) => {
+    const createContact = (addedUser) => {
 
-        const newContact = { userId, name, messages: []}
+        //const newContact = { userId, name, messages: []}
 
         setContacts(prev => {
-            return [...prev, newContact]
+            return [...prev, addedUser]
         })
         setSelectedContactIndex(contacts.length)
         }

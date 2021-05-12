@@ -2,6 +2,7 @@ import React from 'react'
 import OpenPrivatChat from './components/contacts/openPrivatChat'
 import OpenEvent from './components/events/openEvent'
 import { useAuth } from './context/authState'
+import { useContacts } from './context/contactState'
 import { Switch, Route, Redirect } from "react-router-dom";
 import GoogleLogIn from './components/Account/googleLogin'
 import './App.css';
@@ -12,6 +13,7 @@ import RightSide from './components/rightSide'
 function App() {
 
  const { currentUser } = useAuth()
+ const { contacts } = useContacts()
 
  const chat = (
   
@@ -30,7 +32,7 @@ function App() {
 
   <Route path='/contacts'>
     <Sidebar/>
-    <OpenPrivatChat />
+    {contacts && <OpenPrivatChat />}
     <RightSide/>
   </Route>
 

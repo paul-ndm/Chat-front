@@ -1,11 +1,10 @@
 import React, {useState} from 'react';
-import { Card, ListGroup, Button, Modal } from 'react-bootstrap'
+import { Card, ListGroup, Modal } from 'react-bootstrap'
 import { useChat } from '../../context/chatState';
 import { useAuth } from '../../context/authState'
 import { leaveEvent } from '../../utils/api'
-import { BoxArrowLeft, Plus, CalendarEvent, GeoAlt } from 'react-bootstrap-icons'
+import { BoxArrowLeft, Plus} from 'react-bootstrap-icons'
 import AddMemberModal from './addMemberModal'
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const EventInfo = () => {

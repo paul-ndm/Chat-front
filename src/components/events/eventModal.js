@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Modal, Form, Button } from 'react-bootstrap'
 import { useContacts } from '../../context/contactState'
 import { useChat } from '../../context/chatState'
@@ -12,18 +12,16 @@ const EventModal = ({ closeModal }) => {
   const [details, setDetails] = useState({
     name: "",
     place: "",
+    date: new Date().toString()
   })
 
   const {name, place } = details
-
   const { contacts } = useContacts()
   const { createEvent } = useChat()
 
-
-
-  function handleSubmit(e) {
+  const handleSubmit= (e) => {
     e.preventDefault()
-    setDetails(details.date = startDate.toString() )
+    //setDetails({...details, date: startDate.toString()})
     console.log(details)
     createEvent(selectedContacts.map(({userId, name}) => { return {id: userId, name}}), details)
     closeModal()
@@ -34,7 +32,7 @@ const EventModal = ({ closeModal }) => {
 
   };
 
-  function handleCheckboxChange(contact) {
+  const handleCheckboxChange = (contact) => {
     setSelectedContactIds(prev => {
       if (prev.includes(contact)) {
         const result = prev.filter(c => c !== contact)
@@ -50,39 +48,41 @@ const EventModal = ({ closeModal }) => {
   const filterPassedTime = time => {
     const currentDate = new Date();
     const selectedDate = new Date(time);
-
     return currentDate.getTime() < selectedDate.getTime();
   }
 
+
   return (
     <div key={'event-modal'}>
-      <Modal.Header closeButton>New Event</Modal.Header>
+      <Modal.Header key={'event-modal-header'} closeButton>New Event</Modal.Header>
       <Modal.Body key={'event-modal-body'}>
-        <Form onSubmit={handleSubmit}>
-        <Form.Control type="text" name="name" placeholder="name" value={name} onChange={onChange} required />
+        <Form onSubmit={handleSubmit} key= { 'Model-Form'}>
+        <Form.Control key= { 'Model-Form-Control'} type="text" name="name" placeholder="name" value={name} onChange={onChange} required />
         <br/>
-        <Form.Control type="text" name="place" placeholder="place" value={place} onChange={onChange} required />
+        <Form.Control key= { 'Model-Form-Control2'} type="text" name="place" placeholder="place" value={place} onChange={onChange} required />
         <br/>
         <DatePicker
-          selected={startDate}
-          onChange={date => setStartDate(date)}
-          showTimeSelect
-          filterTime={filterPassedTime}
-          dateFormat="MMMM d, yyyy h:mm aa"
-      />
+        selected={startDate}
+        onChange={date => {
+          setStartDate(date)
+          setDetails({...details, date: date.toString()})}
+        }
+        showTimeSelect
+        filterTime={filterPassedTime}
+        dateFormat="MMMM d, yyyy h:mm aa"
+        />
         <br/>
           {contacts.map((contact, index) => (
-            <Form.Group controlId={contact.id} key={contact.id}>
+            <Form.Group key= { index } controlId={contact.id}>
               <Form.Check
-              key={'checkbox', contact.id}
                 type="checkbox"
-                value={selectedContacts.includes(contact)}
+                checked={selectedContacts.includes(contact)}
                 label={contact.name}
                 onChange={() => handleCheckboxChange(contact)}
               />
             </Form.Group>
           ))}
-          <Button type="submit" className="sidebar sideButton"  >Create</Button>
+          <Button key= { 'Event-Submit-Button'} type="submit" className="sidebar sideButton"  >Create</Button>
         </Form>
       </Modal.Body>
     </div>

@@ -1,7 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import io from 'socket.io-client'
 import { useAuth } from './authState'
-import { URL } from '../socket/socket'
+
+
+const URL = 'https://eventchating.herokuapp.com'
+//const URL =  'http://localhost:5000'
 
 const SocketContext = React.createContext()
 
@@ -13,7 +16,7 @@ export const SocketState = ({children}) => {
      const [socket, setSocket] = useState()
      const { currentUser } = useAuth()
 
-     useEffect(async ()=> {
+     useEffect( ()=> {
 
         console.log('connecting to:', URL)
 
@@ -24,12 +27,9 @@ export const SocketState = ({children}) => {
                 {query: { id }}
             )
             setSocket(newSocket)
-            
-    
             return () => newSocket.close()
         }
-
-     }, [])
+     }, [currentUser])
 
     return (
         <SocketContext.Provider value={{ socket }}>

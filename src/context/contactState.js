@@ -8,14 +8,11 @@ export function useContacts() {
 
 export const ContactState = ({children}) => {
 
-    const [contacts, setContacts] = useState()
+    const [contacts, setContacts] = useState([])
     const [selectedContactIndex, setSelectedContactIndex] = useState(0)
 
    // add new Contact
     const createContact = (addedUser) => {
-
-        //const newContact = { userId, name, messages: []}
-
         setContacts(prev => {
             return [...prev, addedUser]
         })

@@ -19,7 +19,7 @@ const ContactsPage = () => {
       <Plus size={45} />
       </button>
   
-        <Modal show={showModal} onHide={closeModal}>
+      <Modal show={showModal} onHide={closeModal}>
           <ContactModal closeModal={closeModal}/>
         </Modal>
       <ContactList/>

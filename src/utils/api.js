@@ -1,5 +1,7 @@
 import { fireBase, db } from "../firebase/firebase"
-import { URL } from "../socket/socket"
+
+const URL = 'https://eventchating.herokuapp.com' 
+// const URL = 'http://localhost:5000'
 
 
 export const checkAccount = (currentUser) => {

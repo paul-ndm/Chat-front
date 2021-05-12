@@ -1,20 +1,10 @@
 import React from 'react';
-import { ListGroup, Button } from 'react-bootstrap'
+import { ListGroup } from 'react-bootstrap'
 import { useChat } from '../../context/chatState';
-import { useAuth } from '../../context/authState'
-import { leaveEvent } from '../../utils/api'
 
 const EventList = () => {
 
-    const { events, selectedEventIndex, setSelectedEventIndex, removeLocalEvent } = useChat()
-    const { currentUser } = useAuth()
-
-    const leave = (event) => {
-        removeLocalEvent(event)
-        const { uid, displayName } = currentUser
-        leaveEvent(uid, displayName, event.eventId)
-
-    }
+    const { events, selectedEventIndex, setSelectedEventIndex } = useChat()
 
     return (
         <ListGroup variant="flush">

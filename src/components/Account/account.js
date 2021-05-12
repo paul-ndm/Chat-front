@@ -1,6 +1,6 @@
-import React, { useState} from 'react';
+import React from 'react';
 import { useAuth } from '../../context/authState'
-import { Modal, Button, Card, ListGroup } from 'react-bootstrap'
+import { Modal, Card, ListGroup } from 'react-bootstrap'
 import { useContacts } from '../../context/contactState'
 import {deleteContactInDb} from '../../utils/api'
 import { XCircleFill } from 'react-bootstrap-icons'
@@ -18,7 +18,7 @@ const AccountModal = () => {
     return (
         
         <Modal.Body key={'event-modal-body'} className="m-0" style={{backgroundColor: '#fafafa'}}>
-        <Card className="mr-3" style={{backgroundColor: '#fafafa'}} className="d-flex flex-col justify-content-center">
+        <Card style={{backgroundColor: '#fafafa'}} className="d-flex mr-3 flex-col justify-content-center">
         <Card.Header className="d-flex flex-row">
             User Information
         </Card.Header>
@@ -40,12 +40,8 @@ const AccountModal = () => {
 
         <ListGroup variant="flush">
         {contacts && contacts.map((contact, index) => (
-            <ListGroup variant="flush" className="d-flex flex-row justify-content-between" style={{width: '200px'}}>
-            <ListGroup.Item
-           
-            style={{height: '45px', backgroundColor: '#fafafad'}}
-            key={contact.name + index + contact.userId}
-            >
+            <ListGroup key={contact.name + index + contact.userId} variant="flush" className="d-flex flex-row justify-content-between" style={{width: '200px'}}>
+            <ListGroup.Item style={{height: '45px', backgroundColor: '#fafafad'}}>
             {contact.name}
             </ListGroup.Item>
 

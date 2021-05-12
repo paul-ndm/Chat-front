@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react"
-import { fireBase, auth, googleProvider, db } from "../firebase/firebase"
-import {checkAccount, createAccount, getUsers} from '../utils/api'
-import { v4 as uuidV4 } from 'uuid'
+import { auth, googleProvider} from "../firebase/firebase"
+import {checkAccount, getUsers} from '../utils/api'
+
 import { useContacts } from './contactState'
 
 const AuthContext = React.createContext()
@@ -15,7 +15,7 @@ export function AuthState({ children }) {
   const [loading, setLoading] = useState(true)
   const [userData, setUserData] = useState()
   const [allUsers, setAllUsers] = useState()
-  const { setContacts, selectedContactIndex } = useContacts()
+  const { setContacts } = useContacts()
 
   function signup(email, password) {
     console.log(email, password)
@@ -35,21 +35,22 @@ export function AuthState({ children }) {
     return unsubscribe
   }, [])
 // get all users from firestore
-  useEffect(async()=> {
+  useEffect(()=> {
 
-    const allUsersData = await getUsers()
+    (async() => {const allUsersData = await getUsers()
+    setAllUsers(allUsersData)})()
 
-    setAllUsers(allUsersData)
   },[])
 
 // getting user-contacts
-  useEffect( async ()=> {
+  useEffect( ()=> {
   if(currentUser) {
-   const userData = await checkAccount(currentUser)
+
+   (async()=>{const userData = await checkAccount(currentUser)
    setUserData(userData)
    console.log('loading contacts: ', userData.contacts)
    const userContacts = userData.contacts
-  setContacts(userContacts)
+    setContacts(userContacts)})()
   }
 },[currentUser])
 

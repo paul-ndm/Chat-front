@@ -1,20 +1,10 @@
-import React, {useState } from 'react';
+import React from 'react';
 import {ListGroup} from 'react-bootstrap'
 import { useContacts } from '../../context/contactState';
-import { Button, Modal } from 'react-bootstrap'
-import {deleteContactInDb} from '../../utils/api'
-import { useAuth } from '../../context/authState'
 
 const ContactList = () => {
 
-    const { contacts, setSelectedContactIndex, selectedContactIndex, removeLocalContact } = useContacts()
-    const { currentUser } = useAuth()
-
-    const removeContact = (contact) => {
-      removeLocalContact(contact)
-      deleteContactInDb(currentUser, contact)
-
-    }
+    const { contacts, setSelectedContactIndex, selectedContactIndex } = useContacts()
 
     return (
       <ListGroup variant="flush" className="d-flex">

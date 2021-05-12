@@ -4,7 +4,7 @@ import { PersonFill } from 'react-bootstrap-icons'
 import EventPage from './events/EventPage'
 import ContactsPage from './contacts/ContactsPage'
 import { NavLink, Route } from 'react-router-dom'
-import {Button, Modal, Container, Row, Col } from 'react-bootstrap'
+import {Button, Modal } from 'react-bootstrap'
 import AccountModal from './Account/account'
 
 const Sidebar = () => {

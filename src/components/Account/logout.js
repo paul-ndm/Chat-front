@@ -1,6 +1,5 @@
-import React, { useRef } from 'react'
-import { Container, Button } from 'react-bootstrap'
-
+import React from 'react'
+import { Button } from 'react-bootstrap'
 import { useAuth } from '../../context/authState'
 
 const Logout =() => {

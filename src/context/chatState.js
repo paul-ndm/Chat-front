@@ -15,16 +15,18 @@ export const ChatState = ({children}) => {
     const [events, setEvents ] = useState([])
     const [selectedEventIndex, setSelectedEventIndex] = useState(0)
     const { socket } = useSocket()
-    const { setContacts, contacts } = useContacts()
+    const { setContacts } = useContacts()
     const { currentUser } = useAuth()
 
    // getting all events of user
-   useEffect(async()=> {
+   useEffect(()=> {
+
      if(currentUser){
+    (async() => {
     const joinedEvents = await getEventsForUser(currentUser.uid)
     setEvents(joinedEvents)}
-
-    console.log('server:', process.env.REACT_APP_FIREBASE_API_KEY)
+    )()
+    }
 
    },[currentUser])
 
@@ -57,25 +59,23 @@ export const ChatState = ({children}) => {
              }})
              updatePrivateChat(currentUser, spreadContacts)
              return spreadContacts
+
+
             })
             })
 
       socket.on("new-event", createdEvent => {
         setEvents(prev => {
-          setSelectedEventIndex(prev.length)
           return [...prev, createdEvent ]
         })
       })
 
       socket.on('leaving-event', ({eventId, userId}) => {
-        
         console.log('leaving:', userId )
         setEvents(prev => prev.map(event => event.eventId === eventId ? ({...event, recipients: [...event.recipients.filter(recipient => recipient.id !== userId)
-        
         ]}): event))
       } )
           
-  
       return () => {socket.off('receive-message')
                     socket.off("receive-private-message")}
     },[socket])
@@ -104,16 +104,19 @@ export const ChatState = ({children}) => {
 
         socket.emit('new-event', newEvent)
 
-        setEvents(prev => {
-          setSelectedEventIndex(prev.length)
-          return [...prev, newEvent ]
-        })
+        if(events !== undefined ) {
+          setEvents(prev => {
+            return [...prev, newEvent ]
+          })
+          setSelectedEventIndex(events.length)
+        } else {
+          setEvents([newEvent])
+        }
+
       }
 
       const addMember = (newMembers) => {
-
         socket.emit('add-member', { event: events[selectedEventIndex], newMembers })
-
         newMembers.forEach( member => {
           events[selectedEventIndex].recipients.push(member)
         })

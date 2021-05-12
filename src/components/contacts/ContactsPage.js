@@ -14,9 +14,9 @@ const ContactsPage = () => {
 
     return (
 
-      <div className="mt-2">
+      <div className="mt-2 mb-3">
       
-      <button className=" pb-1 sidebar sideButton d-flex justify-content-center w-100" style={{ height: '45px'}} onClick={() => setShowModal(true)}>
+      <button className="sidebar sideButton d-flex justify-content-center w-100" style={{ height: '45px'}} onClick={() => setShowModal(true)}>
       <Plus size={'45px'} />
       </button>
   

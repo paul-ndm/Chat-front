@@ -7,11 +7,11 @@ import { AuthState } from './context/authState'
 import {ChatState} from './context/chatState'
 import {SocketState} from './context/socketState'
 import { ContactState} from './context/contactState'
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 
 ReactDOM.render(
   <React.StrictMode>
-  <BrowserRouter>
+  <HashRouter>
   <ContactState>
   <AuthState>
   <SocketState>
@@ -21,7 +21,7 @@ ReactDOM.render(
   </SocketState>
   </AuthState>
   </ContactState>
-  </BrowserRouter>
+  </HashRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );

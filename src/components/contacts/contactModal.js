@@ -10,7 +10,7 @@ const ContactModal = ({closeModal}) => {
     const [input, setInput] = useState()
     const [selectedUser, setSelectedUser] = useState()
     const [filteredUsers, setFilteredUsers ] = useState()
-    const { createContact } = useContacts()
+    const { createContact, contacts } = useContacts()
     const { allUsers, currentUser } = useAuth()
 
     function handleSubmit(e) {
@@ -23,10 +23,16 @@ const ContactModal = ({closeModal}) => {
 
     const filterByInput = (input) => {
 
+      const selectedIds = contacts.map( contact => contact.userId)
+
       setInput(input)
       const filtered = allUsers.filter(user => {
+
+      const allreadyAdded = selectedIds.includes(user.userId)
+      const isUser = currentUser.uid === user.userId
+
       const userFound = user.name.toLowerCase().includes(input.toLowerCase())
-        if (userFound) {
+        if (userFound && !allreadyAdded && !isUser) {
           return user
         }
       })
@@ -44,7 +50,7 @@ const ContactModal = ({closeModal}) => {
           <Form.Label>Search for Users</Form.Label>
           <Form.Control type="text" value={input} onChange={e=> filterByInput(e.target.value)} required />
         </Form.Group>
-        <Button type="submit">Add Contact</Button>
+        <Button type="submit" className="sidebar sideButton" >Add User</Button>
       </Form>
 
       <ListGroup variant="flush">

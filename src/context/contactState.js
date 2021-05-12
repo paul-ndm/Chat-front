@@ -10,12 +10,7 @@ export function useContacts() {
 
 export const ContactState = ({children}) => {
 
-    const [contacts, setContacts] = useState(
-        [
-        // {id:  "8j2BqDi6NbOjYZHPzDWTSukbtaA3", messages: [], name: "Tin Tin", selected: true},
-        // {id: "q8ZZmMiEzyUZErHrxFKhqg0iI4C2" , messages: [], name: "Paul Mont", selected: false}
-    ]
-    )
+    const [contacts, setContacts] = useState()
     const [selectedContactIndex, setSelectedContactIndex] = useState(0)
 
    // add new Contact

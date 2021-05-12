@@ -9,15 +9,12 @@ const Logout =() => {
 
     return (
 
-        <Container 
-        className="d-flex align-items-center justify-content-center"
-        style={{minHeight: "10vh"}}>
-        <div className="w-100" style={{maxWidth: "400px"}}> 
-        <Button onClick={logout} className="w-100" type="submit">
+        <Button className="sidebar sideButton"
+        style={{ height: "auto"}}
+        onClick={logout} type="submit">
         Log out
         </Button>
-        </div>
-        </Container>
+
     );
   }
 
